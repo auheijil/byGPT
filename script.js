@@ -1,11 +1,11 @@
 const submitBtn = document.getElementById('submit-btn');
 const questionInput = document.getElementById('question-input');
 const outputContainer = document.querySelector('.output-container');
-const apikeyInput = document.getElementById('apikey-input');
+//const apikeyInput = document.getElementById('apikey-input');
 
 submitBtn.addEventListener('click', function() {
   const question = questionInput.value;
-  const apikey = apikeyInput.value;
+  const apikey = "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"
   if (question && apikey) {
     fetch('https://api.openai.com/v1/engine/gpt-3.5-turbo/completions', {
       method: 'POST',
