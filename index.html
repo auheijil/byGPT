@@ -1,192 +1,151 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>OpenAI API调用</title>
-<link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-<style>
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-font-family: 'Poppins', sans-serif;
-}
+  <meta charset="UTF-8">
+  <title>OpenAI API Demo</title>
+  <style>
+    /* 设置网页居中 */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-	body {
-		background-color: #F3F3F3;
-	}
+    /* 设置输入和输出窗口的样式 */
+    #input {
+      width: 400px;
+      height: 100px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
 
-	.container {
-		max-width: 800px;
-		margin: 50px auto;
-		padding: 50px;
-		background-color: #FFFFFF;
-		border-radius: 10px;
-		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-	}
+    #output {
+      width: 400px;
+      height: 200px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
 
-	h1 {
-		font-size: 36px;
-		font-weight: 700;
-		text-align: center;
-		margin-bottom: 30px;
-	}
+    /* 设置 API key 窗口的样式 */
+    #api-key {
+      width: 200px;
+      height: 30px;
+      padding: 5px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
 
-	form {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
+    /* 设置按钮的样式 */
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-	input[type="text"] {
-		width: 100%;
-		padding: 10px;
-		margin-bottom: 20px;
-		border-radius: 5px;
-		border: 1px solid #CCCCCC;
-		font-size: 16px;
-		font-weight: 400;
-		color: #333333;
-		background-color: #F9F9F9;
-		outline: none;
-	}
-
-	textarea {
-		width: 100%;
-		height: 200px;
-		padding: 10px;
-		margin-bottom: 20px;
-		border-radius: 5px;
-		border: 1px solid #CCCCCC;
-		font-size: 16px;
-		font-weight: 400;
-		color: #333333;
-		background-color: #F9F9F9;
-		outline: none;
-		resize: none;
-	}
-
-	.btn {
-		width: 100%;
-		padding: 10px;
-		border-radius: 5px;
-		border: none;
-		font-size: 16px;
-		font-weight: 700;
-		color: #FFFFFF;
-		background-color: #2D9CDB;
-		cursor: pointer;
-		outline: none;
-	}
-
-	.api-key {
-		display: flex;
-		align-items: center;
-		margin-bottom: 20px;
-	}
-
-	.api-key label {
-		font-size: 16px;
-		font-weight: 400;
-		color: #333333;
-		margin-right: 10px;
-	}
-
-	.api-key input[type="text"] {
-		padding: 5px;
-		border-radius: 5px;
-		border: 1px solid #CCCCCC;
-		font-size: 16px;
-		font-weight: 400;
-		color: #333333;
-		background-color: #F9F9F9;
-		outline: none;
-	}
-
-	.output {
-		margin-top: 50px;
-		padding: 20px;
-		border-radius: 5px;
-		border: 1px solid #CCCCCC;
-		font-size: 16px;
-		font-weight: 400;
-		color: #333333;
-		background-color: #F9F9F9;
-		outline: none;
-		white-space: pre-wrap;
-		word-wrap: break-word;
-	}
-
-	.logo {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-bottom: 50px;
-	}
-
-	.logo svg {
-		width: 50px;
-		height: 50px;
-		margin-right: 10px;
-	}
-
-	.logo h2 {
-		font-size: 24px;
-		font-weight: 700;
-		color: #333333;
-	}
-</style>
+    button:hover {
+      background-color: #3e8e41;
+    }
+  </style>
 </head>
+
 <body>
-<div class="container">
-<div class="logo">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M2.05 12c0 5.384 4.366 9.75 9.75 9.75s9.75-4.366 9.75-9.75-4.366-9.75-9.75-9.75S2.05 6.616 2.05 12zm3.719 0c0-2.41.998-4.595 2.601-6.156l1.406 1.406c-1.025 1.025-1.657 2.43-1.657 3.75s.632 2.725 1.657 3.75l-1.406 1.406c-1.603-1.561-2.601-3.746-2.601-6.156zm7.531-6.094l1.406 1.406c-2.177 2.177-2.177 5.722 0 7.899l-1.406 1.406c-2.736-2.736-2.736-7.197 0-9.933z"/></svg>
-<h2>OpenAI API调用</h2>
-</div>
-<form>
-<div class="api-key">
-<label for="api-key">API Key:</label>
-<input type="text" id="api-key" name="api-key" placeholder="请输入您的API Key">
-</div>
-<input type="text" id="input" name="input" placeholder="请输入您的问题">
-<button type="button" class="btn" onclick="getResponse()">提交</button>
-</form>
-<div class="output" id="output"></div>
-</div>
-<script>
-function getResponse() {
-var apiKey = document.getElementById("api-key").value;
-var input = document.getElementById("input").value;
-var output = document.getElementById("output");
-if (apiKey === "") {
-alert("请输入API Key");
-} else if (input === "") {
-alert("请输入问题");
-} else {
-output.innerHTML = "正在查询，请稍等...";
-var xhr = new XMLHttpRequest();
-xhr.open("POST", "https://api.openai.com/v1/engines/davinci-codex/completions", true);
-xhr.setRequestHeader("Content-Type", "application/json");
-xhr.setRequestHeader("Authorization", "Bearer " + apiKey);
-xhr.onreadystatechange = function() {
-if (xhr.readyState == 4) {
-if (xhr.status == 200) {
-var response = JSON.parse(xhr.responseText);
-output.innerHTML = response.choices[0].text;
-} else {
-output.innerHTML = "查询失败";
-}
-}
-};
-xhr.send(JSON.stringify({
-prompt: input,
-max_tokens: 1024,
-n: 1,
-stop: "\n",
-model: "davinci-codex"
-}));
-}
-}
-</script>
+  <div>
+    <input type="text" id="input" placeholder="请输入问题">
+    <button onclick="getResponse()">查询</button>
+    <br>
+    <input type="text" id="api-key" placeholder="请输入API key">
+    <br>
+    <div id="output"></div>
+  </div>
+
+  <!-- 插入素描风格的图标 -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="icon-pencil" viewBox="0 0 24 24">
+      <path d="M4.5 15l-1.5 6h3l1.5-6h-3zm2.5-9l-1.5 6h3l1.5-6h-3zm4.5 3l-1.5 6h3l1.5-6h-3zm2.5-6l-1.5 6h3l1.5-6h-3zm4 9l-1.5 6h3l1.5-6h-3zm-4 0l-1.5 6h3l1.5-6h-3zm-4 0l-1.5 6h3l1.5-6h-3zm-4 0l-1.5 6h3l1.5-6h-3zm-1.5-9v-6h-3v6h3zm14.5 12.5v-9h-2v9h2zm-2-12.5v-3h-3v3h3z" />
+    </symbol>
+  </svg>
+
+  <!-- 插入背景图片 -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="icon-background" viewBox="0 0 24 24">
+      <path d="M0 0h24v24H0z" fill="none" />
+      <path d="M19.25 15.75v-7.5a.75.75 0 0 0-.75-.75h-3.5v-1.5a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75v1.5H7.5a.75.75 0 0 0-.75.75v7.5a.75.75 0 0 0 .75.75h11.5a.75.75 0 0 0 .75-.75zm-6.5-3.75a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm6.5 3.75H4.25v-7.5h15.5v7.5z" />
+    </symbol>
+  </svg>
+
+  <div style="position: fixed; bottom: 10px; right: 10px;">
+    <svg class="icon" aria-hidden="true">
+      <use xlink:href="#icon-pencil"></use>
+    </svg>
+    <svg class="icon" aria-hidden="true">
+      <use xlink:href="#icon-background"></use>
+    </svg>
+  </div>
+
+  <!-- 插入Javascript代码 -->
+  <script>
+    // 获取输入、输出、API key窗口的DOM元素
+    const input = document.getElementById('input');
+    const output = document.getElementById('output');
+    const apiKeyInput = document.getElementById('api-key');
+
+    // 定义获取API响应的函数
+    function getResponse() {
+      // 获取API key
+      const apiKey = apiKeyInput.value;
+
+      // 如果API key为空，则提示用户填写API key
+      if (apiKey === '') {
+        alert('请填写API key！');
+        return;
+      }
+
+      // 获取用户输入的问题
+      const question = input.value;
+
+      // 如果问题为空，则提示用户填写问题
+      if (question === '') {
+        alert('请填写问题！');
+        return;
+      }
+
+      // 构造API请求的URL
+      const url = `https://api.openai.com/v1/engine/gpt-3.5-turbo/completions?prompt=${encodeURI(question)}&max_tokens=50&temperature=0.7`;
+
+      // 发送API请求
+      fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          // 获取API响应的文本
+          const text = data.choices[0].text;
+
+          // 将API响应的文本显示在输出窗口中
+          output.innerHTML = text;
+        })
+        .catch(error => {
+          // 如果请求失败，则提示用户
+          output.innerHTML = `请求失败：${error.message}`;
+        });
+    }
+  </script>
 </body>
+
 </html>
