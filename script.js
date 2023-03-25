@@ -1,39 +1,51 @@
-const apiKeyInput = document.getElementById('api-key-input');
-const apiKeySubmit = document.getElementById('api-key-submit');
-const inputText = document.getElementById('input-text');
-const submitButton = document.getElementById('submit-button');
-const outputText = document.getElementById('output-text');
+// 获取DOM元素
+const questionInput = document.getElementById('question');
+const submitBtn = document.getElementById('submit');
+const answerOutput = document.getElementById('answer');
+const apiKeyInput = document.getElementById('api-key');
+const saveBtn = document.getElementById('save');
 
+// API Key
 let apiKey = '';
 
-apiKeySubmit.addEventListener('click', () => {
-  apiKey = apiKeyInput.value;
-  apiKeyInput.value = '';
-  alert('API Key submitted!');
+// 保存API Key
+saveBtn.addEventListener('click', function() {
+	apiKey = apiKeyInput.value;
+	alert('API Key已保存');
 });
 
-submitButton.addEventListener('click', () => {
-  const question = inputText.value;
-  inputText.value = '';
-  fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      prompt: question,
-      temperature: 0.7,
-      max_tokens: 1024,
-    }),
-  })
-    .then(response => response.json())
-    .then(data => {
-      const answer = data.choices[0].text.trim();
-      outputText.textContent = answer;
-    })
-    .catch(error => {
-      console.error(error);
-      outputText.textContent = 'Error: ' + error.message;
-    });
+// 提交问题并获取答案
+submitBtn.addEventListener('click', function() {
+	const question = questionInput.value.trim();
+	if (!question) {
+		alert('请输入问题');
+		return;
+	}
+	if (!apiKey) {
+		alert('请填写API Key');
+		return;
+	}
+
+	// 调用OpenAI API
+	fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'Authorization': `Bearer ${apiKey}`
+		},
+		body: JSON.stringify({
+			prompt: question,
+			max_tokens: 150,
+			model: 'text-davinci-002',
+			stop: ['\n']
+		})
+	})
+	.then(response => response.json())
+	.then(data => {
+		answerOutput.innerHTML = data.choices[0].text.trim();
+	})
+	.catch(error => {
+		answerOutput.innerHTML = '出错了，请检查API Key是否正确';
+		console.error(error);
+	});
 });
