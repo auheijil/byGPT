@@ -1,30 +1,155 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>OpenAI Q&amp;A</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>OpenAI问答网页</title>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+body {
+font-family: Arial, sans-serif;
+background-color: #f7f7f7;
+}
+header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 20px;
+background-color: #fff;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+header h1 {
+font-weight: bold;
+font-size: 28px;
+color: #333;
+}
+header input[type="text"] {
+padding: 10px;
+border: none;
+border-radius: 5px;
+background-color: #f7f7f7;
+font-size: 16px;
+width: 60%;
+margin-right: 20px;
+}
+header button {
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+background-color: #333;
+color: #fff;
+font-size: 16px;
+cursor: pointer;
+}
+main {
+display: flex;
+flex-direction: column;
+align-items: center;
+margin-top: 40px;
+}
+#output {
+padding: 20px;
+background-color: #fff;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+width: 80%;
+margin-bottom: 20px;
+font-size: 16px;
+line-height: 1.5;
+color: #333;
+min-height: 200px;
+overflow-y: auto;
+}
+#api-key {
+display: flex;
+align-items: center;
+margin-bottom: 20px;
+}
+#api-key input[type="text"] {
+padding: 10px;
+border: none;
+border-radius: 5px;
+background-color: #f7f7f7;
+font-size: 16px;
+width: 300px;
+margin-right: 20px;
+}
+#api-key button {
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+background-color: #333;
+color: #fff;
+font-size: 16px;
+cursor: pointer;
+}
+</style>
 </head>
 <body>
-  <header>
-    <h1>OpenAI Q&amp;A</h1>
-    <div class="api-key">
-      <label for="api-key-input">API Key:</label>
-      <input type="text" id="api-key-input" placeholder="Enter API Key">
-      <button id="api-key-submit">Submit</button>
-    </div>
-  </header>
-  <main>
-    <div class="input-container">
-      <label for="input-text">Ask a question:</label>
-      <input type="text" id="input-text" placeholder="Enter question">
-      <button id="submit-button">Submit</button>
-    </div>
-    <div class="output-container">
-      <h2>Answer:</h2>
-      <p id="output-text"></p>
-    </div>
-  </main>
-  <script src="script.js"></script>
+<header>
+<h1>OpenAI问答网页</h1>
+<input type="text" id="input" placeholder="请输入您的问题">
+<button id="submit">提交</button>
+</header>
+<main>
+<div id="output"></div>
+<div id="api-key">
+<input type="text" id="api-key-input" placeholder="请输入您的OpenAI API key">
+<button id="api-key-submit">保存</button>
+</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+const submitBtn = document.getElementById('submit');
+const input = document.getElementById('input');
+const output = document.getElementById('output');
+const apiKeyInput = document.getElementById('api-key-input');
+const apiKeySubmitBtn = document.getElementById('api-key-submit');
+
+	let apiKey = localStorage.getItem('openai-api-key');
+
+	if (apiKey) {
+		apiKeyInput.value = apiKey;
+	}
+
+	apiKeySubmitBtn.addEventListener('click', () => {
+		apiKey = apiKeyInput.value;
+		localStorage.setItem('openai-api-key', apiKey);
+		alert('API Key已保存！');
+	});
+
+	submitBtn.addEventListener('click', () => {
+		if (!apiKey) {
+			alert('请先输入您的OpenAI API key！');
+			return;
+		}
+
+		const question = input.value.trim();
+
+		if (!question) {
+			alert('请输入问题！');
+			return;
+		}
+
+		axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', {
+			prompt: question,
+			max_tokens: 150,
+			model: "text-davinci-002",
+			api_key: apiKey
+		})
+		.then(res => {
+			console.log(res.data.choices[0].text);
+			output.innerHTML += `<p>您的问题：${question}</p>`;
+			output.innerHTML += `<p>回答：${res.data.choices[0].text}</p>`;
+		})
+		.catch(err => {
+			console.error(err);
+			alert('调用OpenAI API失败！');
+		});
+	});
+</script>
 </body>
 </html>
