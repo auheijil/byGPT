@@ -1,35 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>OpenAI API调用</title>
-  <!-- 引入CSS文件 -->
+  <title>OpenAI Q&amp;A</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
   <header>
-    <h1>OpenAI API调用</h1>
+    <h1>OpenAI Q&amp;A</h1>
+    <div class="api-key">
+      <label for="api-key-input">API Key:</label>
+      <input type="text" id="api-key-input" placeholder="Enter API Key">
+      <button id="api-key-submit">Submit</button>
+    </div>
   </header>
   <main>
     <div class="input-container">
-      <label for="question-input">请输入您的问题：</label>
-      <input type="text" id="question-input" placeholder="在这里输入您的问题...">
+      <label for="input-text">Ask a question:</label>
+      <input type="text" id="input-text" placeholder="Enter question">
+      <button id="submit-button">Submit</button>
     </div>
     <div class="output-container">
-      <p>这里将显示API返回的答案。</p>
-    </div>
-    <div class="apikey-container">
-      <label for="apikey-input">请输入您的OpenAI API Key：</label>
-      <input type="text" id="apikey-input" placeholder="在这里输入您的API Key...">
-      <button id="submit-btn">提交</button>
+      <h2>Answer:</h2>
+      <p id="output-text"></p>
     </div>
   </main>
-  <!-- 引入JS文件 -->
   <script src="script.js"></script>
 </body>
-
 </html>
