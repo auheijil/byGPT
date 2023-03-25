@@ -23,9 +23,8 @@ submitButton.addEventListener('click', () => {
     },
     body: JSON.stringify({
       prompt: question,
-      max_tokens: 100,
-      n: 1,
-      stop: ['\n'],
+      temperature: 0.7,
+      max_tokens: 1024,
     }),
   })
     .then(response => response.json())
