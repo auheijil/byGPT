@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>OpenAI API调用</title>
+<link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Poppins', sans-serif;
+}
+
+	body {
+		background-color: #F3F3F3;
+	}
+
+	.container {
+		max-width: 800px;
+		margin: 50px auto;
+		padding: 50px;
+		background-color: #FFFFFF;
+		border-radius: 10px;
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	}
+
+	h1 {
+		font-size: 36px;
+		font-weight: 700;
+		text-align: center;
+		margin-bottom: 30px;
+	}
+
+	form {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	input[type="text"] {
+		width: 100%;
+		padding: 10px;
+		margin-bottom: 20px;
+		border-radius: 5px;
+		border: 1px solid #CCCCCC;
+		font-size: 16px;
+		font-weight: 400;
+		color: #333333;
+		background-color: #F9F9F9;
+		outline: none;
+	}
+
+	textarea {
+		width: 100%;
+		height: 200px;
+		padding: 10px;
+		margin-bottom: 20px;
+		border-radius: 5px;
+		border: 1px solid #CCCCCC;
+		font-size: 16px;
+		font-weight: 400;
+		color: #333333;
+		background-color: #F9F9F9;
+		outline: none;
+		resize: none;
+	}
+
+	.btn {
+		width: 100%;
+		padding: 10px;
+		border-radius: 5px;
+		border: none;
+		font-size: 16px;
+		font-weight: 700;
+		color: #FFFFFF;
+		background-color: #2D9CDB;
+		cursor: pointer;
+		outline: none;
+	}
+
+	.api-key {
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px;
+	}
+
+	.api-key label {
+		font-size: 16px;
+		font-weight: 400;
+		color: #333333;
+		margin-right: 10px;
+	}
+
+	.api-key input[type="text"] {
+		padding: 5px;
+		border-radius: 5px;
+		border: 1px solid #CCCCCC;
+		font-size: 16px;
+		font-weight: 400;
+		color: #333333;
+		background-color: #F9F9F9;
+		outline: none;
+	}
+
+	.output {
+		margin-top: 50px;
+		padding: 20px;
+		border-radius: 5px;
+		border: 1px solid #CCCCCC;
+		font-size: 16px;
+		font-weight: 400;
+		color: #333333;
+		background-color: #F9F9F9;
+		outline: none;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+	}
+
+	.logo {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 50px;
+	}
+
+	.logo svg {
+		width: 50px;
+		height: 50px;
+		margin-right: 10px;
+	}
+
+	.logo h2 {
+		font-size: 24px;
+		font-weight: 700;
+		color: #333333;
+	}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="logo">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M2.05 12c0 5.384 4.366 9.75 9.75 9.75s9.75-4.366 9.75-9.75-4.366-9.75-9.75-9.75S2.05 6.616 2.05 12zm3.719 0c0-2.41.998-4.595 2.601-6.156l1.406 1.406c-1.025 1.025-1.657 2.43-1.657 3.75s.632 2.725 1.657 3.75l-1.406 1.406c-1.603-1.561-2.601-3.746-2.601-6.156zm7.531-6.094l1.406 1.406c-2.177 2.177-2.177 5.722 0 7.899l-1.406 1.406c-2.736-2.736-2.736-7.197 0-9.933z"/></svg>
+<h2>OpenAI API调用</h2>
+</div>
+<form>
+<div class="api-key">
+<label for="api-key">API Key:</label>
+<input type="text" id="api-key" name="api-key" placeholder="请输入您的API Key">
+</div>
+<input type="text" id="input" name="input" placeholder="请输入您的问题">
+<button type="button" class="btn" onclick="getResponse()">提交</button>
+</form>
+<div class="output" id="output"></div>
+</div>
+<script>
+function getResponse() {
+var apiKey = document.getElementById("api-key").value;
+var input = document.getElementById("input").value;
+var output = document.getElementById("output");
+if (apiKey === "") {
+alert("请输入API Key");
+} else if (input === "") {
+alert("请输入问题");
+} else {
+output.innerHTML = "正在查询，请稍等...";
+var xhr = new XMLHttpRequest();
+xhr.open("POST", "https://api.openai.com/v1/engines/davinci-codex/completions", true);
+xhr.setRequestHeader("Content-Type", "application/json");
+xhr.setRequestHeader("Authorization", "Bearer " + apiKey);
+xhr.onreadystatechange = function() {
+if (xhr.readyState == 4) {
+if (xhr.status == 200) {
+var response = JSON.parse(xhr.responseText);
+output.innerHTML = response.choices[0].text;
+} else {
+output.innerHTML = "查询失败";
+}
+}
+};
+xhr.send(JSON.stringify({
+prompt: input,
+max_tokens: 1024,
+n: 1,
+stop: "\n",
+model: "davinci-codex"
+}));
+}
+}
+</script>
+</body>
+</html>
