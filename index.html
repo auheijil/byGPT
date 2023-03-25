@@ -1,151 +1,40 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpenAI API Demo</title>
-  <style>
-    /* 设置网页居中 */
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    /* 设置输入和输出窗口的样式 */
-    #input {
-      width: 400px;
-      height: 100px;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin-right: 10px;
-    }
-
-    #output {
-      width: 400px;
-      height: 200px;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    /* 设置 API key 窗口的样式 */
-    #api-key {
-      width: 200px;
-      height: 30px;
-      padding: 5px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin-bottom: 10px;
-    }
-
-    /* 设置按钮的样式 */
-    button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #3e8e41;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <div>
-    <input type="text" id="input" placeholder="请输入问题">
-    <button onclick="getResponse()">查询</button>
-    <br>
-    <input type="text" id="api-key" placeholder="请输入API key">
-    <br>
-    <div id="output"></div>
-  </div>
-
-  <!-- 插入素描风格的图标 -->
-  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-    <symbol id="icon-pencil" viewBox="0 0 24 24">
-      <path d="M4.5 15l-1.5 6h3l1.5-6h-3zm2.5-9l-1.5 6h3l1.5-6h-3zm4.5 3l-1.5 6h3l1.5-6h-3zm2.5-6l-1.5 6h3l1.5-6h-3zm4 9l-1.5 6h3l1.5-6h-3zm-4 0l-1.5 6h3l1.5-6h-3zm-4 0l-1.5 6h3l1.5-6h-3zm-4 0l-1.5 6h3l1.5-6h-3zm-1.5-9v-6h-3v6h3zm14.5 12.5v-9h-2v9h2zm-2-12.5v-3h-3v3h3z" />
-    </symbol>
-  </svg>
-
-  <!-- 插入背景图片 -->
-  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-    <symbol id="icon-background" viewBox="0 0 24 24">
-      <path d="M0 0h24v24H0z" fill="none" />
-      <path d="M19.25 15.75v-7.5a.75.75 0 0 0-.75-.75h-3.5v-1.5a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75v1.5H7.5a.75.75 0 0 0-.75.75v7.5a.75.75 0 0 0 .75.75h11.5a.75.75 0 0 0 .75-.75zm-6.5-3.75a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm6.5 3.75H4.25v-7.5h15.5v7.5z" />
-    </symbol>
-  </svg>
-
-  <div style="position: fixed; bottom: 10px; right: 10px;">
-    <svg class="icon" aria-hidden="true">
-      <use xlink:href="#icon-pencil"></use>
-    </svg>
-    <svg class="icon" aria-hidden="true">
-      <use xlink:href="#icon-background"></use>
-    </svg>
-  </div>
-
-  <!-- 插入Javascript代码 -->
-  <script>
-    // 获取输入、输出、API key窗口的DOM元素
-    const input = document.getElementById('input');
-    const output = document.getElementById('output');
-    const apiKeyInput = document.getElementById('api-key');
-
-    // 定义获取API响应的函数
-    function getResponse() {
-      // 获取API key
-      const apiKey = apiKeyInput.value;
-
-      // 如果API key为空，则提示用户填写API key
-      if (apiKey === '') {
-        alert('请填写API key！');
-        return;
-      }
-
-      // 获取用户输入的问题
-      const question = input.value;
-
-      // 如果问题为空，则提示用户填写问题
-      if (question === '') {
-        alert('请填写问题！');
-        return;
-      }
-
-      // 构造API请求的URL
-      const url = `https://api.openai.com/v1/engine/gpt-3.5-turbo/completions?prompt=${encodeURI(question)}&max_tokens=50&temperature=0.7`;
-
-      // 发送API请求
-      fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`
-          }
-        })
-        .then(response => response.json())
-        .then(data => {
-          // 获取API响应的文本
-          const text = data.choices[0].text;
-
-          // 将API响应的文本显示在输出窗口中
-          output.innerHTML = text;
-        })
-        .catch(error => {
-          // 如果请求失败，则提示用户
-          output.innerHTML = `请求失败：${error.message}`;
-        });
-    }
-  </script>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <h1>OpenAI API Demo</h1>
+    <div class="input-container">
+      <label for="input-text">Input:</label>
+      <textarea id="input-text" rows="10"></textarea>
+    </div>
+    <div class="output-container">
+      <label for="output-text">Output:</label>
+      <textarea id="output-text" rows="10" readonly></textarea>
+    </div>
+    <div class="apikey-container">
+      <label for="apikey">API Key:</label>
+      <input type="text" id="apikey" placeholder="Enter your API key here">
+      <button id="submit-btn">Submit</button>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2021 OpenAI API Demo. All rights reserved.</p>
+  </footer>
+  <script src="script.js"></script>
 </body>
-
 </html>
