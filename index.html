@@ -1,40 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OpenAI API Demo</title>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>OpenAI API调用</title>
+  <!-- 引入CSS文件 -->
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <header>
-    <nav>
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </nav>
+    <h1>OpenAI API调用</h1>
   </header>
   <main>
-    <h1>OpenAI API Demo</h1>
     <div class="input-container">
-      <label for="input-text">Input:</label>
-      <textarea id="input-text" rows="10"></textarea>
+      <label for="question-input">请输入您的问题：</label>
+      <input type="text" id="question-input" placeholder="在这里输入您的问题...">
     </div>
     <div class="output-container">
-      <label for="output-text">Output:</label>
-      <textarea id="output-text" rows="10" readonly></textarea>
+      <p>这里将显示API返回的答案。</p>
     </div>
     <div class="apikey-container">
-      <label for="apikey">API Key:</label>
-      <input type="text" id="apikey" placeholder="Enter your API key here">
-      <button id="submit-btn">Submit</button>
+      <label for="apikey-input">请输入您的OpenAI API Key：</label>
+      <input type="text" id="apikey-input" placeholder="在这里输入您的API Key...">
+      <button id="submit-btn">提交</button>
     </div>
   </main>
-  <footer>
-    <p>&copy; 2021 OpenAI API Demo. All rights reserved.</p>
-  </footer>
+  <!-- 引入JS文件 -->
   <script src="script.js"></script>
 </body>
+
 </html>

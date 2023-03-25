@@ -1,49 +1,34 @@
 const submitBtn = document.getElementById('submit-btn');
-const inputText = document.getElementById('input-text');
-const outputText = document.getElementById('output-text');
-const apiKeyInput = document.getElementById('apikey');
+const questionInput = document.getElementById('question-input');
+const outputContainer = document.querySelector('.output-container');
+const apikeyInput = document.getElementById('apikey-input');
 
-submitBtn.addEventListener('click', async () => {
-  const apiKey = apiKeyInput.value;
-  const input = inputText.value.trim();
-
-  if (!apiKey) {
-    alert('Please enter your API key.');
-    return;
-  }
-
-  if (!input) {
-    alert('Please enter some text to generate output.');
-    return;
-  }
-
-  try {
-    const response = await fetch(
-        'https://api.openai.com//v1/chat/completions', 
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${apiKey}`,
+submitBtn.addEventListener('click', function() {
+  const question = questionInput.value;
+  const apikey = apikeyInput.value;
+  if (question && apikey) {
+    fetch('https://api.openai.com/v1/engine/gpt-3.5-turbo/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apikey}`
       },
       body: JSON.stringify({
-        prompt: input,
-        max_tokens: 1024,
+        prompt: question + '\n',
+        max_tokens: 50,
         n: 1,
-        temperature: 0.5,
-        stop: ['\n']
+        stop: '\n'
       })
+    })
+    .then(response => response.json())
+    .then(data => {
+      const answer = data.choices[0].text.trim();
+      outputContainer.innerHTML = `<p>${answer}</p>`;
+    })
+    .catch(error => {
+      outputContainer.innerHTML = `<p>API调用失败，请检查您的API Key是否正确。</p>`;
     });
-
-    const data = await response.json();
-
-    if (data.choices && data.choices.length > 0) {
-      outputText.value = data.choices[0].text.trim();
-    } else {
-      outputText.value = 'Sorry, no output was generated.';
-    }
-  } catch (error) {
-    console.error(error);
-    outputText.value = 'Sorry, an error occurred while generating the output.';
+  } else {
+    outputContainer.innerHTML = `<p>请输入您的问题和API Key。</p>`;
   }
 });
